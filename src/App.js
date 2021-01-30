@@ -1,4 +1,5 @@
 import React from 'react';
+import Conversations from './components/conversations';
 
 const App = () => {
   // create info page
@@ -12,7 +13,11 @@ const App = () => {
   // display graph of edits
   // mutate text box
   // mutation history
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <Conversations />
+    </div>
+  );
 };
 
 export default App;
