@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import Request from '../hooks/Request';
 import './conversations.scss';
 
 const Conversations = () => {
   const [input, setInput] = useState('');
+  const [list, setList] = useState([]);
   const [queue, addToQueue] = useState([]);
 
   const handleInput = (e) => {
