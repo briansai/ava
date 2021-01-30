@@ -6,7 +6,6 @@ const App = () => {
   // get information from backend info endpoint
   // create button to enter app
   // create users
-  // create main box component
   // create screen for all conversations
   // create text box
   // create popup on click conversation

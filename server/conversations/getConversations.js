@@ -2,19 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/conversations', (req, res) => {
-  //   Response:
-  // 200 {
-  //   "conversations": [
-  //     {
-  //       "id": "string",
-  //       "lastMutation": "Object, The last mutation applyed on this conversation",
-  //       "text": "string"
-  //     },
-  //     "..."
-  //   ],
-  //   "msg": "string, an error message, if needed",
-  //   "ok": "boolean"
-  // }
   res.status(200).send({
     conversations: [
       {

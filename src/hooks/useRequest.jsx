@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const Request = ({ url, method, body, onSuccess }) => {
+const useRequest = ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState([]);
   const doRequest = async (props = {}) => {
     try {
       setErrors(null);
 
       const response = await axios[method](url, { ...body, ...props });
-
+      console.log(response);
       onSuccess && onSuccess(response.data);
 
       return response.data;
@@ -20,4 +20,4 @@ const Request = ({ url, method, body, onSuccess }) => {
   return { doRequest, errors };
 };
 
-export default Request;
+export default useRequest;
