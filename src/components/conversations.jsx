@@ -29,22 +29,34 @@ const Conversations = () => {
 
   const keyPress = async (e) => {
     if (e.key === 'Enter') {
-      const q = queue;
-
       if (text.indexOf(' ')) {
         const words = text.split(' ');
-        // put each of the words into the queue
+        const q = queue;
 
         words.forEach(async (word, idx) => {
-          q.push({ author: 'alice', conversationId: idx, text: word });
+          let insertIndex = 0;
+
+          const inputWord = () => {
+            if (idx === words.length - 1) {
+              insertIndex = text.indexOf(` ${word}`);
+              return word.includes('.') ? ` ${word}` : ` ${word}.`;
+            } else if (idx !== 0) {
+              insertIndex = text.indexOf(` ${word}`);
+              return ` ${word}`;
+            }
+
+            insertIndex = text.indexOf(word);
+            return word;
+          };
+          console.log(list.length - 1);
+          q.push({ author: 'alice', conversationId: idx, text: inputWord() });
           axios
             .post('/mutations', {
               author: 'alice',
-              conversationId: idx,
+              conversationId: list[list.length - 1],
               data: {
-                index: 0,
-                length: undefined,
-                text: word,
+                index: insertIndex,
+                text: inputWord(),
                 type: 'insert',
               },
               origin: {

@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { getConversations } = require('./conversations/getConversations');
-const { postMutation } = require('./mutations/postMutation');
+const { getConversations } = require('./routes/conversations/getConversations');
+const { postMutation } = require('./routes/mutations/postMutation');
+const db = require('./db/pgConfig');
 
 const app = express();
 
@@ -16,6 +17,12 @@ app.use(express.json());
 app.use(getConversations);
 app.use(postMutation);
 
-app.listen(3000, () => {
-  console.log(`Listening on port: 3000`);
-});
+db.connect()
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`Listening on port: ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
