@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import useRequest from '../hooks/useRequest';
 import './conversations.scss';
@@ -7,28 +8,18 @@ const Conversations = () => {
   const [list, setList] = useState([]);
   const [queue, addToQueue] = useState([]);
 
-  const { doRequest: getConversations, errors: convoErrors } = useRequest({
+  const { doRequest } = useRequest({
     url: `/conversations`,
     method: 'get',
     body: {},
     onSuccess: (data) => setList(data.conversations),
   });
 
-  const { doRequest: postMutation, errors: mutationErrors } = useRequest({
-    url: `/mutations`,
-    method: 'post',
-    body: { text },
-    onSuccess: (res) => {
-      const queueList = queue;
-      queueList.shift();
-      addToQueue(queueList);
-    },
-  });
-
   useEffect(() => {
     const fetchData = async () => {
-      await getConversations();
+      await doRequest();
     };
+
     fetchData();
   }, []);
 
@@ -38,13 +29,44 @@ const Conversations = () => {
 
   const keyPress = async (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-
       const q = queue;
-      q.push(text);
-      addToQueue(q);
-      await postMutation();
+
+      if (text.indexOf(' ')) {
+        const words = text.split(' ');
+        // put each of the words into the queue
+
+        words.forEach(async (word, idx) => {
+          q.push({ author: 'alice', conversationId: idx, text: word });
+          axios
+            .post('/mutations', {
+              author: 'alice',
+              conversationId: idx,
+              data: {
+                index: 0,
+                length: undefined,
+                text: word,
+                type: 'insert',
+              },
+              origin: {
+                alice: idx,
+                bob: 0,
+              },
+            })
+            .then((res) => {
+              const { conversationId } = JSON.parse(res.config.data);
+              const queueList = queue;
+              const itemIndex = queueList.findIndex(
+                (item) => item.conversationId === conversationId
+              );
+              queueList.splice(itemIndex, 1);
+              addToQueue(queueList);
+            });
+        });
+        addToQueue(q);
+      }
+
       setText('');
+      e.preventDefault();
     }
   };
 
@@ -55,10 +77,8 @@ const Conversations = () => {
         {list.map((conversation) => {
           const { id, text } = conversation;
           return (
-            <div className="conversation">
-              <div key={id} className="text">
-                {text}
-              </div>
+            <div key={id} className="conversation">
+              <div className="text">{text}</div>
             </div>
           );
         })}
