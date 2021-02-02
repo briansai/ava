@@ -35,46 +35,36 @@ const Conversations = () => {
 
         words.forEach(async (word, idx) => {
           let insertIndex = 0;
+          let targetWord = '';
 
           const inputWord = () => {
-            if (idx === words.length - 1) {
-              insertIndex = text.indexOf(` ${word}`);
-              return word.includes('.') ? ` ${word}` : ` ${word}.`;
+            if (idx === 0) {
+              insertIndex = text.indexOf(word);
+              targetWord = word;
             } else if (idx !== 0) {
               insertIndex = text.indexOf(` ${word}`);
-              return ` ${word}`;
+              targetWord = ` ${word}`;
             }
-
-            insertIndex = text.indexOf(word);
-            return word;
           };
-          console.log(list.length - 1);
-          q.push({ author: 'alice', conversationId: idx, text: inputWord() });
-          axios
-            .post('/mutations', {
-              author: 'alice',
-              conversationId: list[list.length - 1],
-              data: {
-                index: insertIndex,
-                text: inputWord(),
-                type: 'insert',
-              },
-              origin: {
-                alice: idx,
-                bob: 0,
-              },
-            })
-            .then((res) => {
-              const { conversationId } = JSON.parse(res.config.data);
-              const queueList = queue;
-              const itemIndex = queueList.findIndex(
-                (item) => item.conversationId === conversationId
-              );
-              queueList.splice(itemIndex, 1);
-              addToQueue(queueList);
-            });
+
+          inputWord();
+
+          await axios.post('/mutations', {
+            author: 'alice',
+            conversationId: list.length,
+            data: {
+              index: insertIndex,
+              text: targetWord,
+              type: 'insert',
+            },
+            origin: {
+              alice: idx,
+              bob: 0,
+            },
+          });
+
+          window.location.reload();
         });
-        addToQueue(q);
       }
 
       setText('');

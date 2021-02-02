@@ -9,12 +9,11 @@ router.post('/mutations', (req, res) => {
   `;
 
   db.query(q, (err, result) => {
-    console.log(result);
     if (err) {
       throw new Error(err);
     }
 
-    res.status(200).send({});
+    res.status(200).send(result);
   });
 });
 
