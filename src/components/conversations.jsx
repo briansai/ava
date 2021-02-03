@@ -1,27 +1,10 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import useRequest from '../hooks/useRequest';
-import './conversations.scss';
+import React, { useState } from 'react';
+import './Conversations.scss';
 
-const Conversations = () => {
+const Conversations = ({ setEditInfo, list, clickConversation }) => {
   const [text, setText] = useState('');
-  const [list, setList] = useState([]);
   const [queue, addToQueue] = useState([]);
-
-  const { doRequest } = useRequest({
-    url: `/conversations`,
-    method: 'get',
-    body: {},
-    onSuccess: (data) => setList(data.conversations),
-  });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await doRequest();
-    };
-
-    fetchData();
-  }, []);
 
   const handleInput = (e) => {
     setText(e.target.value);
@@ -79,7 +62,11 @@ const Conversations = () => {
         {list.map((conversation) => {
           const { id, text } = conversation;
           return (
-            <div key={id} className="conversation">
+            <div
+              key={id}
+              className="conversation"
+              onClick={clickConversation(conversation)}
+            >
               <div className="text">{text}</div>
             </div>
           );

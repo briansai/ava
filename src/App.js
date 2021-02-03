@@ -1,21 +1,46 @@
-import React from 'react';
-import Conversations from './components/conversations';
+import React, { Fragment, useState, useEffect } from 'react';
+import useRequest from './hooks/useRequest';
+import Edit from './components/Edit.jsx';
+import Conversations from './components/Conversations';
+import './App.scss';
 
 const App = () => {
-  // create info page
-  // get information from backend info endpoint
-  // create button to enter app
-  // create users
-  // create screen for all conversations
-  // create text box
-  // create popup on click conversation
-  // display graph of edits
-  // mutate text box
-  // mutation history
+  const [edit, setEdit] = useState(false);
+  const [editInfo, setEditInfo] = useState({});
+  const [list, setList] = useState([]);
+
+  const { doRequest } = useRequest({
+    url: `/conversations`,
+    method: 'get',
+    body: {},
+    onSuccess: (data) => setList(data.conversations),
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await doRequest();
+    };
+
+    fetchData();
+  }, []);
+
+  const clickConversation = (conversation) => (e) => {
+    e.preventDefault();
+    setEdit(true);
+    setEditInfo(conversation);
+  };
+
   return (
-    <div className="App">
-      <Conversations />
-    </div>
+    <Fragment>
+      <div className="edit">{edit && <Edit editInfo={editInfo} />}</div>
+      <div className="App">
+        <Conversations
+          setEditInfo={setEditInfo}
+          list={list}
+          clickConversation={clickConversation}
+        />
+      </div>
+    </Fragment>
   );
 };
 
