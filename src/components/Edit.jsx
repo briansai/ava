@@ -24,9 +24,13 @@ const Edit = ({ editInfo }) => {
   };
 
   return (
-    <div className="edit-container">
+    <div className="edit-component">
       <div className="chart">
         <HorizontalBar data={data} options={options} />
+      </div>
+      <div className="edit-container">
+        <input className="edit-input" value={editInfo.text} />
+        <button className="edit-button">Edit</button>
       </div>
     </div>
   );

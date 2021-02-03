@@ -1,4 +1,4 @@
-.edit-container {
+.edit-component {
   position: absolute;
   padding: 1%;
   top: -50px;
@@ -8,4 +8,35 @@
   min-width: 300px;
   width: 30%;
   border-radius: 2rem;
+  text-align: center;
+
+  .edit-container {
+    display: block;
+    line-height: 2rem;
+    margin: 5% 0 5% 5%;
+    height: 100%;
+    white-space: nowrap;
+
+    .edit-input {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 0;
+      width: 70%;
+      -webkit-appearance: none;
+      border: 1px solid black;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+
+    .edit-button {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 0;
+      -webkit-appearance: none;
+      border: 1px solid black;
+      border-left: none;
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
 }
