@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../../db/pgConfig');
 const ListNode = require('../../classes/ListNode');
+const sortData = require('../../utils/sortData');
 const router = express.Router();
 
 router.get('/conversations', (req, res) => {
@@ -11,17 +12,7 @@ router.get('/conversations', (req, res) => {
   db.query(q, (err, result) => {
     if (err) throw new Error(err);
 
-    const rows = result.rows
-      .sort((a, b) => {
-        const { conversationId: aConvoId, data: aData } = a.conversation;
-        const { conversationId: bConvoId, data: bData } = b.conversation;
-        return aConvoId - bConvoId || aData.index - bData.index;
-      })
-      .reduce((acc, cur) => {
-        const { id, conversation } = cur;
-        acc.push({ id, conversation });
-        return acc;
-      }, []);
+    const rows = sortData(result);
 
     const getConversations = () => {
       let array = [];
@@ -33,12 +24,11 @@ router.get('/conversations', (req, res) => {
       rows.forEach((row, index) => {
         const { conversation: lastRowConvo } = lastRow;
         const { conversation: rowConvo } = row;
-        const { text } = rowConvo.data;
+        const { text, type, index: idx, length } = rowConvo.data;
         if (lastRow && !lastRowConvo) {
           sentence = text;
           lastRow = row;
-          lastList = new ListNode(row.id, null, sentence);
-
+          lastList = new ListNode(row.id, [row], sentence);
           if (rows.length === 1) {
             array.push(lastList);
             return;
@@ -46,7 +36,13 @@ router.get('/conversations', (req, res) => {
 
           conversationHistory.push(row);
         } else if (lastRowConvo.conversationId === rowConvo.conversationId) {
-          sentence += text;
+          if (type === 'delete') {
+            sentence =
+              sentence.substring(0, idx) + sentence.substring(idx + length);
+          } else {
+            sentence += text;
+          }
+
           lastRow = row;
           conversationHistory.push(row);
           lastList = new ListNode(row.id, conversationHistory, sentence);

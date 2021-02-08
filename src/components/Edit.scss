@@ -26,6 +26,7 @@
       border: 1px solid black;
       border-top-left-radius: 0.5rem;
       border-bottom-left-radius: 0.5rem;
+      outline: none;
     }
 
     .edit-button {
@@ -37,6 +38,14 @@
       border-left: none;
       border-top-right-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
+      outline: none;
+      background-color: #24a0ed;
+      color: white;
+      font-weight: 700;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 

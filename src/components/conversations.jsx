@@ -2,9 +2,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import './Conversations.scss';
 
-const Conversations = ({ setEditInfo, list, clickConversation }) => {
+const Conversations = ({ list, clickConversation }) => {
   const [text, setText] = useState('');
-  const [queue, addToQueue] = useState([]);
 
   const handleInput = (e) => {
     setText(e.target.value);
@@ -14,7 +13,6 @@ const Conversations = ({ setEditInfo, list, clickConversation }) => {
     if (e.key === 'Enter') {
       if (text.indexOf(' ')) {
         const words = text.split(' ');
-        const q = queue;
 
         words.forEach(async (word, idx) => {
           let insertIndex = 0;

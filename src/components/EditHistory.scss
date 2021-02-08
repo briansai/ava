@@ -1,15 +1,20 @@
-.history {
-  display: flex;
-  justify-content: space-between;
+.history-list {
+  min-height: 5vh;
+  max-height: 30vh;
   overflow-y: scroll;
 
-  .mutation {
-    margin-top: 1.5%;
-    width: 20%;
-    overflow-x: scroll;
+  .history {
+    display: flex;
+    justify-content: space-between;
 
-    &:last-child {
-      margin-bottom: 2%;
+    .mutation {
+      margin-top: 1.5%;
+      width: 20%;
+      overflow-x: scroll;
+
+      &:last-child {
+        margin-bottom: 2%;
+      }
     }
   }
 }

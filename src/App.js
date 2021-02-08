@@ -8,7 +8,6 @@ const App = () => {
   const [edit, setEdit] = useState(false);
   const [editInfo, setEditInfo] = useState({});
   const [list, setList] = useState([]);
-
   const { doRequest } = useRequest({
     url: `/conversations`,
     method: 'get',

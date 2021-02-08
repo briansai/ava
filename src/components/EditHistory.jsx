@@ -7,19 +7,19 @@ const EditHistory = ({ editInfo }) => {
     return acc;
   }, []);
 
-  console.log(history);
   return (
-    <div>
+    <div className="history-list">
       {history.map((mutation) => {
-        const { origin, data, conversationId } = mutation.conversation;
+        const { origin, data } = mutation.conversation;
         const user = Object.keys(origin);
         const { type, index, text } = data;
         return (
-          <div className="history">
+          <div key={mutation.id} className="history">
             <div className="mutation">{user[0]}</div>
+            <div className="mutation">{origin[user[0]]}</div>
             <div className="mutation">{type}</div>
             <div className="mutation">{index}</div>
-            <div className="mutation">{text}</div>
+            <div className="mutation">'{text}'</div>
           </div>
         );
       })}
