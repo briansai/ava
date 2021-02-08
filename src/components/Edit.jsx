@@ -37,7 +37,7 @@ const Edit = ({ editInfo }) => {
       let startIndex = 0;
       let endIndex = 0;
       let sentence = '';
-      let change = [];
+      let change = changes;
 
       for (let x = index; x >= 0; x--) {
         // if the character is a space and is not where it started
