@@ -30,10 +30,16 @@ const Edit = ({ editInfo }) => {
       ],
     },
   };
-  const handleInput = (e) => {};
+
+  const handleInput = (e) => {
+    const index = e.target.selectionStart;
+    setText(e.target.value);
+    setCursorPosition(index);
+  };
+
   const handleDelete = (e) => {
-    if (e.keyCode === 8) {
-      const index = e.target.selectionStart;
+    const index = e.target.selectionStart;
+    if (e.keyCode === 8 && cursorPosition !== index) {
       let startIndex = 0;
       let endIndex = 0;
       let sentence = '';
@@ -58,7 +64,6 @@ const Edit = ({ editInfo }) => {
         endIndex = x + 1;
       }
 
-      // take context length and delete when edit is clicked
       const deletedText = text.substring(startIndex, endIndex + 1);
       const deletedIndex = text.indexOf(deletedText);
       sentence = text.substring(0, startIndex) + text.substring(endIndex);
@@ -69,6 +74,7 @@ const Edit = ({ editInfo }) => {
         index: deletedIndex,
         type: 'delete',
         origin: 'alice',
+        editedText: deletedText,
       });
       setChanges(change);
     }
@@ -86,22 +92,21 @@ const Edit = ({ editInfo }) => {
 
     changes.length &&
       changes.forEach(async (change) => {
-        const { index, text: changeText, type, origin, length } = change;
+        const { index, editedText, type, origin, length } = change;
         const conversation =
           editInfo.lastMutation[lastMutation.length - 1].conversation;
-        const idx = conversation.origin[origin]++;
-        console.log(editInfo.lastMutation);
+        conversation.origin[origin]++;
         const request = await axios.post('/mutations', {
           author: 'alice',
           conversationId: conversation.conversationId,
           data: {
             index,
-            text: changeText,
+            text: editedText,
             type,
             length: length - 1,
           },
           origin: {
-            alice: idx,
+            alice: conversation.origin[origin],
             bob: 0,
           },
         });

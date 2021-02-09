@@ -3,6 +3,7 @@ const db = require('../../db/pgConfig');
 const router = express.Router();
 
 router.post('/mutations', (req, res) => {
+  console.log('REQ BODY--->', req.body);
   const q = `
     INSERT INTO conversations (conversation)
     VALUES ('${JSON.stringify(req.body)}')
