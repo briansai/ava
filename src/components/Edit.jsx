@@ -33,8 +33,10 @@ const Edit = ({ editInfo }) => {
 
   const handleInput = (e) => {
     const { selectionStart, value } = e.target;
-    setText(value);
-    setCursorPosition(selectionStart);
+    if (e.key) {
+      setText(value);
+      setCursorPosition(selectionStart);
+    }
   };
 
   const handleDelete = (e) => {
@@ -67,6 +69,7 @@ const Edit = ({ editInfo }) => {
       const deletedText = text.substring(startIndex, endIndex + 1);
       const deletedIndex = text.indexOf(deletedText);
       sentence = text.substring(0, startIndex) + text.substring(endIndex);
+
       setText(sentence);
       setCursorPosition(startIndex);
       change.push({
@@ -81,6 +84,7 @@ const Edit = ({ editInfo }) => {
   };
 
   const keyUp = (e) => {
+    console.log(e.target.value);
     if (e.keyCode === 8) {
       e.target.selectionStart = cursorPosition;
     }
