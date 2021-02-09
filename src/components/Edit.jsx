@@ -32,9 +32,9 @@ const Edit = ({ editInfo }) => {
   };
 
   const handleInput = (e) => {
-    const index = e.target.selectionStart;
-    setText(e.target.value);
-    setCursorPosition(index);
+    const { selectionStart, value } = e.target;
+    setText(value);
+    setCursorPosition(selectionStart);
   };
 
   const handleDelete = (e) => {
@@ -88,13 +88,13 @@ const Edit = ({ editInfo }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    const conversation =
+      editInfo.lastMutation[lastMutation.length - 1].conversation;
     let promises = [];
 
     changes.length &&
       changes.forEach(async (change) => {
         const { index, editedText, type, origin, length } = change;
-        const conversation =
-          editInfo.lastMutation[lastMutation.length - 1].conversation;
         conversation.origin[origin]++;
         const request = await axios.post('/mutations', {
           author: 'alice',
@@ -113,6 +113,34 @@ const Edit = ({ editInfo }) => {
 
         promises.push(request);
       });
+
+    text.split(' ').forEach(async (word, index) => {
+      if (!editInfo.text.includes(word)) {
+        let editedText = word;
+        conversation.origin.alice++;
+
+        if (index !== 0) {
+          editedText = ` ${word}`;
+        }
+
+        const idx = text.indexOf(editedText);
+        const request = await axios.post('/mutations', {
+          author: 'alice',
+          conversationId: conversation.conversationId,
+          data: {
+            index: idx,
+            text: editedText,
+            type: 'insert',
+          },
+          origin: {
+            alice: conversation.origin.alice,
+            bob: 0,
+          },
+        });
+
+        promises.push(request);
+      }
+    });
 
     await Promise.all(promises);
   };

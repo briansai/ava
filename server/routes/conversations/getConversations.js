@@ -25,6 +25,7 @@ router.get('/conversations', (req, res) => {
         const { conversation: lastRowConvo } = lastRow;
         const { conversation: rowConvo } = row;
         const { text, type, index: idx, length } = rowConvo.data;
+
         if (lastRow && !lastRowConvo) {
           sentence = text;
           lastRow = row;
@@ -40,7 +41,9 @@ router.get('/conversations', (req, res) => {
             sentence =
               sentence.substring(0, idx) + sentence.substring(idx + length);
           } else {
-            sentence += text;
+            const sentenceEnd = sentence.substring(idx);
+            const sentenceStart = sentence.substring(0, idx);
+            sentence = sentenceStart + text + sentenceEnd;
           }
 
           lastRow = row;
