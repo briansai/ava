@@ -1,0 +1,108 @@
+.edit-container {
+  display: flex;
+  align-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height: 2rem;
+  margin: 5% 0 5% 5%;
+  height: 100%;
+  width: 90%;
+  border: 1px solid black;
+
+  .input-container {
+    width: 40%;
+    white-space: nowrap;
+
+    .input {
+      width: 50%;
+      font-size: 16px;
+      outline: none;
+      border: 1px solid black;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding: 4px;
+    }
+
+    .edit-button {
+      width: 35px;
+      padding: 6px 0;
+      display: inline-block;
+      -webkit-appearance: none;
+      border: 1px solid black;
+      border-left: none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      outline: none;
+      background-color: #24a0ed;
+      color: white;
+      font-weight: 700;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .word-container {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 0 3%;
+    margin: 2%;
+    position: relative;
+
+    .word {
+      display: inline;
+      margin-right: 13px;
+    }
+
+    .arrow {
+      display: inline;
+      position: absolute;
+      top: 50%;
+      right: 9%;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid gray;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .selected {
+      position: absolute;
+      line-height: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      top: 80%;
+      right: -5%;
+      z-index: 1;
+      background-color: white;
+      border: 1px solid black;
+      border-radius: 5px;
+
+      .action {
+        &:last-child {
+          padding: 6px;
+        }
+
+        &:not(:last-child) {
+          padding: 6px;
+        }
+
+        &:hover {
+          cursor: pointer;
+          border-radius: 5px;
+          background-color: #cccccc;
+        }
+      }
+    }
+
+    .none {
+      display: none;
+    }
+  }
+}

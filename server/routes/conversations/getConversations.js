@@ -25,7 +25,7 @@ router.get('/conversations', (req, res) => {
         const { conversation: lastRowConvo } = lastRow;
         const { conversation: rowConvo } = row;
         const { text, type, index: idx, length } = rowConvo.data;
-
+        console.log(row);
         if (lastRow && !lastRowConvo) {
           sentence = text;
           lastRow = row;
@@ -45,7 +45,7 @@ router.get('/conversations', (req, res) => {
             const sentenceStart = sentence.substring(0, idx);
             sentence = sentenceStart + text + sentenceEnd;
           }
-
+          console.log('SENTENCE-->', sentence);
           lastRow = row;
           conversationHistory.push(row);
           lastList = new ListNode(row.id, conversationHistory, sentence);

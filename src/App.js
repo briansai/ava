@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import useRequest from './hooks/useRequest';
-import Edit from './components/Edit.jsx';
-import Conversations from './components/Conversations';
+import Edit from './components/edit/Edit.jsx';
+import Conversations from './components/conversations/Conversations';
 import './App.scss';
 
 const App = () => {
@@ -31,7 +31,9 @@ const App = () => {
 
   return (
     <Fragment>
-      <div className="edit">{edit && <Edit editInfo={editInfo} />}</div>
+      <div className="edit">
+        {edit && <Edit editInfo={editInfo} setEdit={setEdit} />}
+      </div>
       <div className="App">
         <Conversations
           setEditInfo={setEditInfo}

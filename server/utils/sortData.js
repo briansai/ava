@@ -12,16 +12,8 @@ const compareOrigin = (originA, originB) => {
 const sortData = (result) => {
   return result.rows
     .sort((a, b) => {
-      const {
-        conversationId: aConvoId,
-        data: aData,
-        origin: originA,
-      } = a.conversation;
-      const {
-        conversationId: bConvoId,
-        data: bData,
-        origin: originB,
-      } = b.conversation;
+      const { conversationId: aConvoId, origin: originA } = a.conversation;
+      const { conversationId: bConvoId, origin: originB } = b.conversation;
 
       return aConvoId - bConvoId || compareOrigin(originA, originB);
     })

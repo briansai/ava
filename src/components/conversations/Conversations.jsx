@@ -13,6 +13,8 @@ const Conversations = ({ list, clickConversation }) => {
     if (e.key === 'Enter') {
       if (text.indexOf(' ')) {
         const words = text.split(' ');
+        let count = {};
+        let sentence = '';
 
         words.forEach(async (word, idx) => {
           let insertIndex = 0;
@@ -20,10 +22,13 @@ const Conversations = ({ list, clickConversation }) => {
 
           const inputWord = () => {
             if (idx === 0) {
-              insertIndex = text.indexOf(word);
               targetWord = word;
+              sentence = word;
+              count[word] = 1;
             } else if (idx !== 0) {
-              insertIndex = text.indexOf(` ${word}`);
+              count[word] ? count[word]++ : (count[word] = 1);
+              insertIndex = sentence.length;
+              sentence += ` ${word}`;
               targetWord = ` ${word}`;
             }
           };
