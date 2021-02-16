@@ -1,0 +1,28 @@
+.user-container {
+  text-align: center;
+  margin: 0 auto;
+  height: 40vh;
+  width: 30%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .text {
+    margin: 3% 0;
+  }
+
+  .user-text {
+    width: 80%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 2rem;
+
+    &:hover {
+      background-color: #e6f5ff;
+      cursor: pointer;
+    }
+  }
+}

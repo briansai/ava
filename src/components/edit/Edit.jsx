@@ -5,7 +5,7 @@ import EditText from './EditText';
 import { mutationTitles } from '../../utils/constants';
 import './Edit.scss';
 
-const Edit = ({ editInfo, setEdit }) => {
+const Edit = ({ editInfo, setEdit, user }) => {
   const [text, setText] = useState(editInfo.text);
   const { lastMutation } = editInfo;
   const lastConversation = lastMutation[lastMutation.length - 1].conversation;
@@ -45,6 +45,7 @@ const Edit = ({ editInfo, setEdit }) => {
           text={text}
           origin={origin}
           setEdit={setEdit}
+          user={user}
         />
       </div>
       <div className="edit-history">
@@ -56,7 +57,7 @@ const Edit = ({ editInfo, setEdit }) => {
             </div>
           ))}
         </div>
-        <EditHistory editInfo={editInfo} />
+        <EditHistory user={user} editInfo={editInfo} />
       </div>
     </div>
   );

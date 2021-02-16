@@ -1,4 +1,5 @@
 import React from 'react';
+import EditHistoryList from './EditHistoryList';
 import './EditHistory.scss';
 
 const EditHistory = ({ editInfo }) => {
@@ -9,18 +10,37 @@ const EditHistory = ({ editInfo }) => {
 
   return (
     <div className="history-list">
-      {history.map((mutation) => {
-        const { origin, data } = mutation.conversation;
-        const user = Object.keys(origin);
-        const { type, index, text } = data;
+      {history.map((mutation, idx) => {
+        const { author, origin, data } = mutation.conversation;
+        const mutations = editInfo.lastMutation;
+        const prevMutation = mutations[idx].conversation.origin;
+        const originList = Object.entries(origin);
+        let userName = '';
+        let currentManipulation = 1;
+
+        if (idx !== history.length - 1) {
+          for (let item of originList) {
+            const name = item[0];
+            const prevChange = prevMutation[name];
+            const currentChange = item[1];
+
+            if (prevChange !== currentChange) {
+              userName = name;
+              currentManipulation = currentChange;
+              break;
+            }
+          }
+        } else {
+          userName = author;
+        }
+
         return (
-          <div key={mutation.id} className="history">
-            <div className="mutation">{user[0]}</div>
-            <div className="mutation">{origin[user[0]]}</div>
-            <div className="mutation">{type}</div>
-            <div className="mutation">{index}</div>
-            <div className="mutation">'{text}'</div>
-          </div>
+          <EditHistoryList
+            userName={userName}
+            currentManipulation={currentManipulation}
+            data={data}
+            mutation={mutation}
+          />
         );
       })}
     </div>

@@ -5,7 +5,7 @@ import { getPosition } from '../../utils/functions';
 import { actions } from '../../utils/constants';
 import './EditText.scss';
 
-const EditText = ({ lastConversation, text, setEdit }) => {
+const EditText = ({ user, lastConversation, text, setEdit }) => {
   const [sentence, setSentence] = useState(text);
   const [arrowClicked, setArrowClicked] = useState(false);
   const [selectedWord, setSelectedWord] = useState({
@@ -57,7 +57,7 @@ const EditText = ({ lastConversation, text, setEdit }) => {
     }
 
     if (!text.includes(editedText)) {
-      editOrigin.alice++;
+      editOrigin[user]++;
       const deleteRequest = {
         author,
         conversationId,
@@ -67,10 +67,10 @@ const EditText = ({ lastConversation, text, setEdit }) => {
           type: 'delete',
           length: editData.length,
         },
-        origin: editOrigin.alice,
+        origin: editOrigin,
       };
 
-      editOrigin.alice++;
+      editOrigin[user]++;
       const editRequest = {
         author,
         conversationId,
@@ -79,7 +79,7 @@ const EditText = ({ lastConversation, text, setEdit }) => {
           text: textPosition ? ` ${editedText}` : `${editedText} `,
           type: 'insert',
         },
-        origin: editOrigin.alice,
+        origin: editOrigin,
       };
       const startString = sentence.substring(
         0,
@@ -96,7 +96,8 @@ const EditText = ({ lastConversation, text, setEdit }) => {
     }
   };
 
-  const saveChanges = () => {
+  const saveChanges = (e) => {
+    e.preventDefault();
     const promises = changes.map((change) => {
       if (change.data.type === 'insert') {
         return postMutation(insertText(change));
@@ -106,11 +107,12 @@ const EditText = ({ lastConversation, text, setEdit }) => {
     });
 
     Promise.all(promises);
-    window.location.reload();
+
     setEdit(false);
   };
 
   const handleAction = (e) => {
+    e.preventDefault();
     setClickedAction(e.target.innerText);
   };
 
@@ -165,7 +167,7 @@ const EditText = ({ lastConversation, text, setEdit }) => {
         })}
       </div>
       <div>
-        <button onClick={saveChanges}>SAVE CHANGES</button>
+        <button onClick={(e) => saveChanges(e)}>SAVE CHANGES</button>
       </div>
     </Fragment>
   );

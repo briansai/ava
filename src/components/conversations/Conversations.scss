@@ -18,7 +18,7 @@
     overflow-y: auto;
   }
 
-  .conversation {
+  [class^='conversation'] {
     padding-left: 10px;
 
     .text {
@@ -33,6 +33,14 @@
       &:hover {
         cursor: pointer;
       }
+    }
+
+    .conversation-left {
+      float: left;
+    }
+
+    .conversation-right {
+      float: right;
     }
   }
 

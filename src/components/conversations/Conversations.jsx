@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import './Conversations.scss';
 
-const Conversations = ({ list, clickConversation }) => {
+const Conversations = ({ user, list, clickConversation }) => {
   const [text, setText] = useState('');
 
   const handleInput = (e) => {
@@ -14,6 +14,10 @@ const Conversations = ({ list, clickConversation }) => {
       if (text.indexOf(' ')) {
         const words = text.split(' ');
         let count = {};
+        let originData = {
+          alice: 0,
+          bob: 0,
+        };
         let sentence = '';
 
         words.forEach(async (word, idx) => {
@@ -33,20 +37,19 @@ const Conversations = ({ list, clickConversation }) => {
             }
           };
 
+          originData[user]++;
+
           inputWord();
 
           await axios.post('/mutations', {
-            author: 'alice',
+            author: user,
             conversationId: list.length,
             data: {
               index: insertIndex,
               text: targetWord,
               type: 'insert',
             },
-            origin: {
-              alice: idx,
-              bob: 0,
-            },
+            origin: originData,
           });
 
           window.location.reload();
@@ -63,11 +66,15 @@ const Conversations = ({ list, clickConversation }) => {
       <h1 className="conversations-header">Conversations</h1>
       <div className="conversations-list">
         {list.map((conversation) => {
-          const { id, text } = conversation;
+          const { id, text, lastMutation } = conversation;
+          const author =
+            lastMutation[lastMutation.length - 1].conversation.author;
+          const conversationClass =
+            author === user ? 'conversation-right' : 'conversation-left';
           return (
             <div
               key={id}
-              className="conversation"
+              className={`${conversationClass}`}
               onClick={clickConversation(conversation)}
             >
               <div className="text">{text}</div>
