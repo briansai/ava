@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import './EditHistoryList.scss';
 
-const EditHistoryList = ({ userName, currentManipulation, data, mutation }) => {
+const EditHistoryList = ({ userName, currentManipulation, data }) => {
   const { type, index, text } = data;
   return (
-    <div key={mutation.id} className="history">
+    <Fragment>
       <div className="mutation">{userName}</div>
       <div className="mutation">{currentManipulation}</div>
       <div className="mutation">{type}</div>
       <div className="mutation">{index}</div>
       <div className="mutation">'{text}'</div>
-    </div>
+    </Fragment>
   );
 };
 

@@ -6,15 +6,5 @@
   .history {
     display: flex;
     justify-content: space-between;
-
-    .mutation {
-      margin-top: 1.5%;
-      width: 20%;
-      overflow-x: scroll;
-
-      &:last-child {
-        margin-bottom: 2%;
-      }
-    }
   }
 }

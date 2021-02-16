@@ -1,19 +1,15 @@
 import React from 'react';
 import EditHistoryList from './EditHistoryList';
+import { reverseHistory } from '../../utils/functions';
 import './EditHistory.scss';
 
 const EditHistory = ({ editInfo }) => {
-  const history = editInfo.lastMutation.reduce((acc, cur) => {
-    acc.unshift(cur);
-    return acc;
-  }, []);
-
+  const history = reverseHistory(editInfo);
   return (
     <div className="history-list">
       {history.map((mutation, idx) => {
         const { author, origin, data } = mutation.conversation;
-        const mutations = editInfo.lastMutation;
-        const prevMutation = mutations[idx].conversation.origin;
+        const prevMutation = editInfo.lastMutation[idx].conversation.origin;
         const originList = Object.entries(origin);
         let userName = '';
         let currentManipulation = 1;
@@ -35,12 +31,14 @@ const EditHistory = ({ editInfo }) => {
         }
 
         return (
-          <EditHistoryList
-            userName={userName}
-            currentManipulation={currentManipulation}
-            data={data}
-            mutation={mutation}
-          />
+          <div key={mutation.id} className="history">
+            <EditHistoryList
+              userName={userName}
+              currentManipulation={currentManipulation}
+              data={data}
+              mutation={mutation}
+            />
+          </div>
         );
       })}
     </div>
